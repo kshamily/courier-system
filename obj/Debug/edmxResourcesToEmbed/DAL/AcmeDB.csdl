@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ACMEDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="UserDetail">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="LastName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Username" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="PhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Role" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="IsActive" Type="Boolean" Nullable="false" />
+    <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Customers" Relationship="ACMEDBModel.FK_Customer_Customer" FromRole="UserDetail" ToRole="Customer" />
+    <NavigationProperty Name="Couriers" Relationship="ACMEDBModel.FK_Courier_UserDetail" FromRole="UserDetail" ToRole="Courier" />
+    <NavigationProperty Name="Tickets" Relationship="ACMEDBModel.FK_Ticket_UserDetail" FromRole="UserDetail" ToRole="Ticket" />
+    <NavigationProperty Name="Tickets1" Relationship="ACMEDBModel.FK_Ticket_UserDetail1" FromRole="UserDetail" ToRole="Ticket" />
+  </EntityType>
+  <EntityContainer Name="ACMEDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="UserDetails" EntityType="Self.UserDetail" />
+    <EntitySet Name="Customers" EntityType="ACMEDBModel.Customer" />
+    <AssociationSet Name="FK_Customer_Customer" Association="ACMEDBModel.FK_Customer_Customer">
+      <End Role="UserDetail" EntitySet="UserDetails" />
+      <End Role="Customer" EntitySet="Customers" />
+    </AssociationSet>
+    <EntitySet Name="Couriers" EntityType="ACMEDBModel.Courier" />
+    <AssociationSet Name="FK_Courier_UserDetail" Association="ACMEDBModel.FK_Courier_UserDetail">
+      <End Role="UserDetail" EntitySet="UserDetails" />
+      <End Role="Courier" EntitySet="Couriers" />
+    </AssociationSet>
+    <EntitySet Name="Tickets" EntityType="ACMEDBModel.Ticket" />
+    <AssociationSet Name="FK_Ticket_Courier" Association="ACMEDBModel.FK_Ticket_Courier">
+      <End Role="Courier" EntitySet="Couriers" />
+      <End Role="Ticket" EntitySet="Tickets" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Ticket_Customer" Association="ACMEDBModel.FK_Ticket_Customer">
+      <End Role="Customer" EntitySet="Customers" />
+      <End Role="Ticket" EntitySet="Tickets" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Ticket_Customer1" Association="ACMEDBModel.FK_Ticket_Customer1">
+      <End Role="Customer" EntitySet="Customers" />
+      <End Role="Ticket" EntitySet="Tickets" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Ticket_UserDetail" Association="ACMEDBModel.FK_Ticket_UserDetail">
+      <End Role="UserDetail" EntitySet="UserDetails" />
+      <End Role="Ticket" EntitySet="Tickets" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Ticket_UserDetail1" Association="ACMEDBModel.FK_Ticket_UserDetail1">
+      <End Role="UserDetail" EntitySet="UserDetails" />
+      <End Role="Ticket" EntitySet="Tickets" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Customer">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Phonenumber" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Address" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Street" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Ave" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="Boolean" Nullable="false" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+    <Property Name="UpdatedOn" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="UserDetail" Relationship="ACMEDBModel.FK_Customer_Customer" FromRole="Customer" ToRole="UserDetail" />
+    <NavigationProperty Name="Tickets" Relationship="ACMEDBModel.FK_Ticket_Customer" FromRole="Customer" ToRole="Ticket" />
+    <NavigationProperty Name="Tickets1" Relationship="ACMEDBModel.FK_Ticket_Customer1" FromRole="Customer" ToRole="Ticket" />
+  </EntityType>
+  <Association Name="FK_Customer_Customer">
+    <End Type="ACMEDBModel.UserDetail" Role="UserDetail" Multiplicity="0..1" />
+    <End Type="ACMEDBModel.Customer" Role="Customer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserDetail">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="Customer">
+        <PropertyRef Name="CreatedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Courier">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Phonenumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="IsActive" Type="Boolean" Nullable="false" />
+    <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="UdpateOn" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="CreatedBy" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="UserDetail" Relationship="ACMEDBModel.FK_Courier_UserDetail" FromRole="Courier" ToRole="UserDetail" />
+    <Property Name="Address" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Tickets" Relationship="ACMEDBModel.FK_Ticket_Courier" FromRole="Courier" ToRole="Ticket" />
+  </EntityType>
+  <Association Name="FK_Courier_UserDetail">
+    <End Type="ACMEDBModel.UserDetail" Role="UserDetail" Multiplicity="1" />
+    <End Type="ACMEDBModel.Courier" Role="Courier" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserDetail">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="Courier">
+        <PropertyRef Name="CreatedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Ticket">
+    <Key>
+      <PropertyRef Name="TicketID" />
+    </Key>
+    <Property Name="TicketID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FromCustomerID" Type="Int32" Nullable="false" />
+    <Property Name="ToCustomerID" Type="Int32" Nullable="false" />
+    <Property Name="CreatedByID" Type="Int32" Nullable="false" />
+    <Property Name="UpdatedByID" Type="Int32" />
+    <Property Name="Status" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CourierId" Type="Int32" />
+    <Property Name="BillTo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DeliveryTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="ActualDeliveryTime" Type="DateTime" Precision="3" />
+    <Property Name="PickUpTime" Type="DateTime" Precision="3" />
+    <Property Name="ActualPickupTime" Type="DateTime" Precision="3" />
+    <Property Name="BillAmount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+    <Property Name="SpecialInstructions" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="NavigationInstructions" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+    <Property Name="UpdatedOn" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Courier" Relationship="ACMEDBModel.FK_Ticket_Courier" FromRole="Ticket" ToRole="Courier" />
+    <NavigationProperty Name="Customer" Relationship="ACMEDBModel.FK_Ticket_Customer" FromRole="Ticket" ToRole="Customer" />
+    <NavigationProperty Name="Customer1" Relationship="ACMEDBModel.FK_Ticket_Customer1" FromRole="Ticket" ToRole="Customer" />
+    <NavigationProperty Name="UserDetail" Relationship="ACMEDBModel.FK_Ticket_UserDetail" FromRole="Ticket" ToRole="UserDetail" />
+    <NavigationProperty Name="UserDetail1" Relationship="ACMEDBModel.FK_Ticket_UserDetail1" FromRole="Ticket" ToRole="UserDetail" />
+  </EntityType>
+  <Association Name="FK_Ticket_Courier">
+    <End Type="ACMEDBModel.Courier" Role="Courier" Multiplicity="0..1" />
+    <End Type="ACMEDBModel.Ticket" Role="Ticket" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Courier">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Ticket">
+        <PropertyRef Name="CourierId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Ticket_Customer">
+    <End Type="ACMEDBModel.Customer" Role="Customer" Multiplicity="1" />
+    <End Type="ACMEDBModel.Ticket" Role="Ticket" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Ticket">
+        <PropertyRef Name="FromCustomerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Ticket_Customer1">
+    <End Type="ACMEDBModel.Customer" Role="Customer" Multiplicity="1" />
+    <End Type="ACMEDBModel.Ticket" Role="Ticket" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Ticket">
+        <PropertyRef Name="ToCustomerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Ticket_UserDetail">
+    <End Type="ACMEDBModel.UserDetail" Role="UserDetail" Multiplicity="1" />
+    <End Type="ACMEDBModel.Ticket" Role="Ticket" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserDetail">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="Ticket">
+        <PropertyRef Name="CreatedByID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Ticket_UserDetail1">
+    <End Type="ACMEDBModel.UserDetail" Role="UserDetail" Multiplicity="0..1" />
+    <End Type="ACMEDBModel.Ticket" Role="Ticket" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserDetail">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="Ticket">
+        <PropertyRef Name="UpdatedByID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
